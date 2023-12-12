@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login.js";
 import Hello from "./pages/hello.js";
 
-import './index.css';
+import './assets/css/index.css';
 
 export default function App() {
   return (
