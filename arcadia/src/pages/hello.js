@@ -1,4 +1,4 @@
-function Hello() {
+export default function Hello() {
     let html = null;
 
     const display = async () => {
@@ -22,5 +22,3 @@ function Hello() {
     display();
     return html;
 }
-
-export default Hello;
