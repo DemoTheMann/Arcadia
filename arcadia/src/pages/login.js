@@ -1,6 +1,7 @@
 import './../assets/css/login.css';
+import { Link } from "react-router-dom";
 
-function Login() {
+export default function Login() {
   const API_URL = 'https://api.spacetraders.io/v2/'
 
   const display = async () => {
@@ -31,8 +32,9 @@ function Login() {
       let response = await fetch(url, options);
       let data = await response.json();
       return data;
+
     } catch(error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -40,7 +42,15 @@ function Login() {
     e.preventDefault();
     let token = e.currentTarget.elements.login__token.value;
     signIn(token).then((result)=>{
-      console.log(result['data']['symbol']);
+      
+      if(!result.error){
+        console.log(result['data']);
+        localStorage.setItem('symbol', result['data']['symbol']);
+        localStorage.setItem('token', token);
+
+      } else {
+
+      }
     });
 
   }
@@ -50,9 +60,7 @@ function Login() {
     let expected = 'SpaceTraders is currently online and available to play'
     console.log(result);
     if(result  !== expected){
-      console.log(false);
-    } else {
-      console.log(true);
+      html = "<h1>SpaceTraders is currently offline</h1>"
     }
     return html;
   });
@@ -64,10 +72,9 @@ function Login() {
       <input type='text' id='login__token' name='login__token' placeholder='token' required></input>
       <button id='login__submit' type='submit'>Confirm</button>
     </form>
+    <Link to='/error'>error</Link>
   </section>
   ;
 
   return html;
 }
-
-export default Login;
