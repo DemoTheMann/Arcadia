@@ -1,22 +1,36 @@
 import './../assets/css/login.css';
 import { Link } from "react-router-dom";
+import { redirect } from "react-router-dom";
+import { useState } from 'react';
 
 export default function Login() {
   const API_URL = 'https://api.spacetraders.io/v2/'
+  let html = '';
 
-  const display = async () => {
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const apiStatus = async () => {
       let url = API_URL;
-      let data = null;
+      let expected = 'SpaceTraders is currently online and available to play'
+
       await fetch(url)
       .then(response => response.json())
       .then(response => {
-        data = response['status'];
+        if(response['status']  !== expected){
+          console.log(response['status']);
+          console.log('false');
+        } else {
+          console.log(response['status']);
+          console.log('true');
+        }
       })
+
       .catch((error) => {
         console.log(error);
       })
-    return data;
   }
+
+
 
   const signIn = async (token) => {
     let url = API_URL+'/my/agent';
@@ -49,32 +63,24 @@ export default function Login() {
         localStorage.setItem('token', token);
 
       } else {
-
+        setErrorMsg('Wrong Token');
       }
     });
 
   }
-      
 
-  display().then((result)=>{
-    let expected = 'SpaceTraders is currently online and available to play'
-    console.log(result);
-    if(result  !== expected){
-      html = "<h1>SpaceTraders is currently offline</h1>"
-    }
-    return html;
-  });
-
-  let html = 
-  <section className='login'>
-    <form onSubmit={handleSubmit}>
-      <label htmlFor='login__token'>Please input your token</label>
-      <input type='text' id='login__token' name='login__token' placeholder='token' required></input>
-      <button id='login__submit' type='submit'>Confirm</button>
-    </form>
-    <Link to='/error'>error</Link>
-  </section>
-  ;
-
+      html = 
+        <section className='login'>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor='login__token'>Please input your token</label>
+            <input type='text' id='login__token' name='login__token' placeholder='token' required></input>
+            <button id='login__submit' type='submit'>Confirm</button>
+          </form>
+          <h2 className='errorMsg'>{errorMsg}</h2>
+        </section>
+      ;
+  
+  console.log(errorMsg);
+  console.log(html);
   return html;
 }

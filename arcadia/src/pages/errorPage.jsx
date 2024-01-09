@@ -1,9 +1,12 @@
-export default function Hello() {
+import { useRouteError } from "react-router-dom";
+
+export default function ErrorPage() {
+    const error = useRouteError();
+    console.error(error);
     let html = null;
 
     const display = async () => {
         let url = 'https://api.spacetraders.io/v2/';
-        let data = null;
         await fetch(url)
         .then(response => response.json())
         .then(response => {
@@ -15,10 +18,13 @@ export default function Hello() {
     }
 
     html =
-    <div>
-        <p>Hello</p>
-    </div>
+    <div id="error-page">
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>
+        <i>{error.statusText || error.message}</i>
+      </p>
+    </div>;
 
-    display();
     return html;
 }
